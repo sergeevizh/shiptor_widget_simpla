@@ -1,0 +1,5 @@
+{
+    "require": {
+        "shiptor-russia/api-client": "^1.0"
+    }
+}
