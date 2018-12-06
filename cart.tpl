@@ -13,7 +13,7 @@
     
     window.weight = [
         {foreach from=$cart->purchases item=product}
-            {($product->weight > 0) ? $product->weight : 3},
+            {($product->weight > 0) ? $product->weight : 0.1},
         {/foreach}
     ]
     

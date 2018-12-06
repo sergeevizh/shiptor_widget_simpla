@@ -6,7 +6,7 @@ $(function(){
 })
 
 setTimeout(function(){
-	shiptor_widget()
+    shiptor_widget()
 } , 1000)
 
 function copy(mainObj) {
@@ -25,9 +25,9 @@ function shiptor_widget(){
     
         shiptorData = {}
 
-	var elemShiptorWidget = document.querySelector("#shiptor_widget");
+    var elemShiptorWidget = document.querySelector("#shiptor_widget");
 
-	setTimeout(function(){
+    setTimeout(function(){
             $("._shiptor_widget_settlement").after("<div class='col-lg-12'>\n\
 <div class='_shiptor_widget_group_title' style='width:260px;'>Улица</div>\n\
 <input type='text' name='shiptor_street' value='' class='additional_inputs shiptor_street'  style='width:260px;' required>\n\
@@ -36,48 +36,49 @@ function shiptor_widget(){
 <div class='_shiptor_widget_group_title'  style='width:160px;'>Квартира</div>\n\
 <input type='text' name='shiptor_flat' value='' class='additional_inputs shiptor_flat'  style='width:60px;' required>\n\
 </div>")
-	   $("._shiptor_widget_order_default").find('.col-lg-12').removeClass('col-lg-12')
-        $('[name="settlement"]').attr('autocomplete', 'off')
-	} , 2000)
+            $("._shiptor_widget_order_default").find('.col-lg-12').removeClass('col-lg-12')
+    $('[name="settlement"]').attr('autocomplete', 'off')
+} , 2000)
 
 
-	elemShiptorWidget.addEventListener("onLocationSearch",function(ce){ 
-		console.log('onLocationSearch')
-		console.log(ce.detail)
-	});
 
-	elemShiptorWidget.addEventListener("onLocationSelect",function(ce){ 
+    elemShiptorWidget.addEventListener("onLocationSearch",function(ce){ 
+        console.log('onLocationSearch')
+        console.log(ce.detail)
+    });
+
+    elemShiptorWidget.addEventListener("onLocationSelect",function(ce){ 
             ////alert('onLocationSelect')
             console.log('onLocationSelect')
-		console.log(ce.detail) 
+        console.log(ce.detail) 
             shiptorData.location = ce.detail.city 
-	}); 
+    }); 
  
-	elemShiptorWidget.addEventListener("onMethodSelect",function(ce){ 
+    elemShiptorWidget.addEventListener("onMethodSelect",function(ce){ 
             //alert(('onMethodSelect'))
-            console.log('onMethodSelect')	
-		console.log(ce.detail)
+            console.log('onMethodSelect')   
+        console.log(ce.detail)
                 shiptorData.method = ce.detail                
                 delete shiptorData.pvz 
                 delete shiptorData.courier
-	});
+    });
 
-	elemShiptorWidget.addEventListener("onCourierSelect",function(ce){
+    elemShiptorWidget.addEventListener("onCourierSelect",function(ce){
             //alert(('onCourierSelect'))
             console.log('onCourierSelect') 
             console.log(ce.detail)
             shiptorData.courier = ce.detail 
-	});
+    });
 
-	elemShiptorWidget.addEventListener("onPvzSelect",function(ce){ 
+    elemShiptorWidget.addEventListener("onPvzSelect",function(ce){ 
             ////alert('onLocationSelect')
             shiptorData.pvz = ce.detail
             console.log(ce.detail)
-	});
+    });
 
-	elemShiptorWidget.addEventListener("onWidgetClose",function(ce){ 
-		console.log(ce.detail)
-	});
+    elemShiptorWidget.addEventListener("onWidgetClose",function(ce){ 
+        console.log(ce.detail)
+    });
         
         
         $('input[type=submit][name=checkout]').on('click' , function(ev){
@@ -107,12 +108,14 @@ function shiptor_widget(){
             }
             
             // не выбран курьер
-            if(shiptorData.method[1] !== undefined && shiptorData.courier === undefined){
+            if(shiptorData.method[12] !== undefined && shiptorData.courier === undefined && $("[name='courier']").val() === null){
                 $('select[name=courier]')[0].scrollIntoView()
                 $('select[name=courier]').css('border', '1px solid red')
                 return false;
-            }else if(shiptorData.method[1] !== undefined && $("[name='courier']").val() !== null){
-                shiptorData.courier = { method: { id:  $("[name='courier']").val() } }
+            }else if(shiptorData.method[12] !== undefined && shiptorData.courier === undefined && $("[name='courier']").val() !== null){
+                var met_id = $("[name='courier']").val() == 12 ? 1 : $("[name='courier']").val()
+                shiptorData.courier = shiptorData.method[$("[name='courier']").val()]
+                shiptorData.courier.method.id = met_id
                  $('select[name=courier]').css('border', 'none')
             }
             
@@ -148,14 +151,13 @@ function shiptor_widget(){
                     // не выбран имя email телефон
             var checking_inp = ["name" , "email" , "phone"]
             for(var i = 0; i < checking_inp.length; i++){                    
-                var a = $("[name='cart'] [name="+ checking_inp[i] +"]")
-                if(a.val().length <= 5) {
-                    a.css("background", "red")
-                    a[0].scrollIntoView()
+                if($("[name="+ checking_inp[i] +"]").val().length <= 5) {
+                    $("[name="+ checking_inp[i] +"]").css("background", "red")
+                    $("[name="+ checking_inp[i] +"]")[0].scrollIntoView()
                     return false;
                 };
-                a.css("background", "none")
-                shiptorData[checking_inp[i]] = a.val()
+                $("[name="+ checking_inp[i] +"]").css("background", "none")
+                shiptorData[checking_inp[i]] = $("[name="+ checking_inp[i] +"]").val()
             }
              
             shiptorData.comment = $("[name='comment']").val()

@@ -17,7 +17,7 @@
 7. view/CartView.php
 
 в блок   проверки нажатия формы
-  if(isset($_POST['checkout']))
+if(isset($_POST['checkout']) && !empty($_POST['shiptor']))
     {
 
         $Shiptor          = json_decode($this->request->post('shiptor'), true);
